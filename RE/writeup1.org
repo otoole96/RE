@@ -1,6 +1,6 @@
-#+AUTHOR Zachary O'Toole
-#+TITLE Writeup November 2019
-#+EMAIL toole96@gmail.com
+#+AUTHOR: Zachary O'Toole
+#+TITLE: Writeup November 2019
+#+EMAIL: toole96@gmail.com
 
 * Writeup 1
 
