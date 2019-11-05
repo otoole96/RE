@@ -1,0 +1,11 @@
+* CTF Writeups
+
+Welcome! This repository contains writeups for the fun CTFs I have completed. During the explanations, I will try to maintain a high-level approach and not divulge exactly what CTFs they are. This way, they are more for educational purposes and others trying attempting them will not be spoiled the opportunity to learn.
+
+With these, my main purpose is to convey a few different things:
+*** Interesting approaches to solving unique problems
+*** My experience and thought-process, including successes and failures
+*** Tools and techniques
+*** To show a fun and exciting side to these challenges
+
+Hopefully, you find somethere here interesting. If you have any questions, please feel free to visit my website zach-otoole.com where you can find contact info. Thanks!
