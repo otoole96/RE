@@ -1,9 +1,7 @@
 #+AUTHOR: Zachary O'Toole
 #+TITLE: Writeup November 2019
 
-** Description
-
-*** Overview
+** I. Overview
 This CTF is from HTB, but I will omit the name of it to hopefully deter anyone from cheating the flag. Although, I am sure if someone tried, they could cross reference what I say here and figure it out. 
 Anyway, this started out like many reversing CTFs: you are given a file. In this case, the file extention was ~.bin~, likely indicating a binary file. But, it never hurts to run a quick ~file~ command on it, which yields
 
@@ -11,10 +9,24 @@ Anyway, this started out like many reversing CTFs: you are given a file. In this
 ctf.bin: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=e8d44daa961ccb2cafc92c93b18b3edd522c0e74, stripped
 #+end_src
 
-** Initial Impressions
+Nothing too interesting here. We have a 64-bit ELF (Executable and linkable format) executable that has been stripped. ELF is a object file format compatible with linux-based systems and the fact that it has been stripped means symbolic 
+information has been removed. For reversing, having symbolic information is always a blessing but never expected. In industry, you may find it more common to get an executable with symbolic information, depending on what you are 
+reverse engineering. For instance, a project I worked on involved a *very* large application which had debug information. Without it, the effort would have likely been nearly impossible. Anyways, it looks like we can start digging into
+the application.
 
-** Process
+** II. Running the program
+A good first step is to just run the program (assuming you trust the source) and try to understand it from a user perspective. For many software reverse engineering (SWRE) efforts, it is imperative to unerstand the application 
+from the user perspective, how inputs affect outputs, and gain as much knowledge as possible. Besides, this is usually the easiest part, so let's see what we get!
 
-** Attempt 1
+#+begin_src
+$ chmod +x ctf.bin 
+$ ./ctf.bin 
+$ 
+#+end_src
+
+Nothing? Interesting. I guess this is not one of those programs. It looks like we will have to dive into the program using a debugger or decompiler to get an understanding of what is going on. I suppose this would be a good 
+place to talk about tools. There are many, and everyone is going to have a preference with one or another. This might include gdb, radare, IDA, binary ninja, etc. Gosh, on linux, you can even use ~objdump -d~ and get a good idea of 
+what is going on. Personally, I believe in learning a tool and trying to master it. So, I have chosen the NSA developed Ghidra for a couple of reasons. First, I think it will be an exceptionally capable program in the near future, as long as 
+the NSA continues to develop it. Second, it's FREE. Hard to argue with a good bargain. So, let's load this into Ghidra and see what we can find.
 
 ** Conclusion
