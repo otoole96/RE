@@ -1,10 +1,15 @@
 #+AUTHOR: Zachary O'Toole
 #+TITLE: Writeup November 2019
-#+EMAIL: toole96@gmail.com
-
-* Writeup 1
 
 ** Description
+
+*** Overview
+This CTF is from HTB, but I will omit the name of it to hopefully deter anyone from cheating the flag. Although, I am sure if someone tried, they could cross reference what I say here and figure it out. 
+Anyway, this started out like many reversing CTFs: you are given a file. In this case, the file extention was ~.bin~, likely indicating a binary file. But, it never hurts to run a quick ~file~ command on it, which yields
+
+#+begin
+ctf.bin: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=e8d44daa961ccb2cafc92c93b18b3edd522c0e74, stripped
+#+end
 
 ** Initial Impressions
 
