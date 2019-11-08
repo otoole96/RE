@@ -30,6 +30,13 @@ what is going on. Personally, I believe in learning a tool and trying to master 
 the NSA continues to develop it. Second, it's FREE. Hard to argue with a good bargain. So, let's load this into Ghidra and see what we can find.
 
 ** III. Static analysis
-Finally, we can actually start reverse engineering this program. I am going to omit how to get Ghidra up and running-its a fairly straight-forward process. 
+Finally, we can actually start reverse engineering this program. I am going to omit how to get Ghidra up and running-- its a fairly straight-forward process. However, it may take a bit more time to get used to navigating Ghidra. There are some nice features I'd like to mention before diving into things. First, the decompiler is very powerful. It provides a *pseudocode* representation of the assembly code, usually resembling a C/C++ style syntax. With that being said, it does not decompile some portions very well (at all). This is where your extensive knowledge as a reverse engineer would come into play! But, I digress. The decompiler will only be marginally helpful for this application as it was likely written in assembly. Another feature I wanted to highlight is the function call graph. This window creates a hierarchical graph of how a function is called and what it calls. For larger programs, this can be helpful with figuring out how specific functions fit within the overall context of the application. So, what does Ghidra look like then? The following figure shows the top of the disassembly in the **Listing** window. 
 
 [[./img/iii_initialview.jpg]]
+
+Really, this is pretty basic stuff. There are plenty of tools that spit out the disassembly of a binary. It is, however, important to know that this window is still very valuable for the following reason. Decompilers are not 100% accurate. This is due to the fact that a lot of information is lost when the program is compiled, especially without symbols. I am not too well-versed on how decompilation algorithms work, but I am optimistic they will improve with time. Until then, it is still important for people doing reversing to be very comfortable with assembly code to verify or correct what the decompiler produces. So, let's take a look at what the decompiled code looks like. The following screenshots are of interesting functions in the binary.
+
+[[./img/iii_func1.png]]
+[[./img/iii_func2.png]]
+[[./img/iii_func3.png]]
+[[./img/iii_func4.png]]
