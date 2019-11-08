@@ -29,4 +29,9 @@ place to talk about tools. There are many, and everyone is going to have a prefe
 what is going on. Personally, I believe in learning a tool and trying to master it. So, I have chosen the NSA developed Ghidra for a couple of reasons. First, I think it will be an exceptionally capable program in the near future, as long as 
 the NSA continues to develop it. Second, it's FREE. Hard to argue with a good bargain. So, let's load this into Ghidra and see what we can find.
 
-** Conclusion
+** III. Static analysis
+Finally, we can actually start reverse engineering this program. I am going to omit how to get Ghidra up and running-its a fairly straight-forward process. 
+
+#+CAPTION: Initial Ghidra View: Assembly Code
+#+NAME:   fig:SED-HR4049
+[[./img/iii_initialview.jpg]]
