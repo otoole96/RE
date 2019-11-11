@@ -40,3 +40,33 @@ Really, this is pretty basic stuff. There are plenty of tools that spit out the 
 [[./img/iii_func2.png]]
 [[./img/iii_func3.png]]
 [[./img/iii_func4.png]]
+
+I went ahead and renamed them after a quick to determine what the function might do. The following table shows each:
+
+|   | Original Name | New Name                | Brief Description                                                                                   |   |
+|---+---------------+-------------------------+-----------------------------------------------------------------------------------------------------+---|
+| 1 | FUN_004008fd  | main                    | The entry function calls this function, equivalent to main                                          |   |
+| 2 | FUN_004009aa  | secretPasswordFileCheck | This is called from the main function, looks like it opens a file and checks its contents against a |   |
+| 3 | FUN_00400a5b  | flagGenerator1          | Looks like it is responsible for generating (probably) the wrong flag                               |   |
+| 4 | FUN_00400afe  | flagGenerator2          | Unreachable, but similar to the flagGenerator1                                                      |   |
+
+Additionally, I might as well include the full function call tree. It is pretty interesting and a neat feature of Ghidra. 
+
+[[./img/function_call_tree.png]]
+
+This figure allows us to see the whole picture after having renamed some functions. We can get a good understanding of how the program acts as a whole. As we can see, (4) does not get called in the tree. After reading through the code in (3), this will likely be a problem we have to consider later. But for now, we can just go through the normal execution cycle of the program statically. 
+
+From here on, I will explain what I am doing and avoid putting in much more code. Let's take a look at (1). The first part seems to be using a pseudo-random number generator using the time as a seed. This seems like a good way to produce random numbers as each runtime will produce a different seed and ultimately number. After some control flow, it starts calling some of the other functions. 
+
+***** A. Initial Impression 
+Initially, I was really curious about (2). Without too much inspection, it looks like the function opens the file "/tmp/secret" and reads in the contents, checking it against the password. So, we can easily make that file and see if the output changes. Spoiler, it doesn't. There must be some exit call before we hit the flag generator function. Low and behold, the secret password function exits if the return value of strcmp is 0, which occurs when the strings are the same (lines 21-23 of (2)). This can be solved with a simple patch. The plan is to change the JNZ to a JZ opcode, which effectively negates the if-statement. To do this, I am using emacs hexl mode. We just need to get the address from Ghidra, which can be done by referring to the listing. Then, we must locate the opcode for JNZ (should be 74) and change it to the opcode for JZ (should be 75). Note, you will have to pay attention to the operands and addressing modes. They must match up for this simple patch to work. After loading the new binary into Ghidra, we can see the logic has changed.
+
+[[./img/patch1.png]]
+
+But we have more work to do. After running, nothing happens again. This after inspecting the return values of the function, we can see there are some specific cases where the function returns 1. Looking at (1), it exits if the return value is 0. So, we want (2) to return 1 or to change the logic in (1). Solution? Another patch! We can even do a patch similar to the one previously mentioned. Instead of JNZ to JZ, we can do JZ to JNZ and negate the logic. After running the binary, we finally got an output! 
+
+#+begin_src
+231262d7212431267311f2631201f312d
+Are you sure it's the right one? ..
+#+end_src
+
