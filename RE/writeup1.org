@@ -70,3 +70,28 @@ But we have more work to do. After running, nothing happens again. This after in
 Are you sure it's the right one? ..
 #+end_src
 
+But, this is not the flag, evidenced by second line it prints and confirmed by the fact that submission yields nothing. With that being said, progress has been made, and we can continue to try some different things. 
+
+Here, we can clearly tell the programmer is trying to provide us with some hint. This is likely not the correct flag generator. Remember that unreachable function from earlier? Maybe that could be the correct function to run. 
+
+Again, I fired up the hex editor provided by emacs and patched the program such that the program would run the hidden function (4) instead of (3). This can be done by simply changing the control flow logic in function (1). Now, when we run the program, we get the following output in the terminal:
+
+#+begin_src
+ffffffc3ffffffdcffffffddffffffdbffffffd7ffffffdcffffffddffffffcaffffffe7ffffffcbffffffccffffffddffffffdeffffffd9ffffffd6ffffffd7ffffff89ffffff89ffffff80ffffffe7ffffff99ffffff99ffffffe7ffffffc5
+--hit any key
+#+end_src
+
+Clearly, we are not quite there yet. No matter what inputs, we always get this output. From here, I got pretty lost, so I decided to revisit static analysis for some more hints.
+
+***** A. Take 2
+
+There are some really interesting sections of data used within the binary. These are just bytes of random (or not so random) data. Let's take a look at the context of how they are used, and maybe we can figure out what they are. 
+
+- Section 1
+[[./img/data_section1.png]]
+
+- Section 2
+[[./img/data_section2.png]]
+
+Flag:
+{decooder_stefano118_!!_}
