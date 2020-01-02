@@ -1,0 +1,12 @@
+#+AUTHOR: Zachary O'Toole
+#+TITLE: Writeup December 2019
+
+
+*** I. Introduction
+This CTF is another reversing exercise, albeit much simpler than the previous. To start, we are given another binary file that turns out to be an executable. Running the file command on it, we get
+
+#+begin_src
+ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=ba116ba1912a8c3779ddeb579404e2fdf34b1568, stripped
+#+end_src
+
+Spoiler alert, this will be a much more simple problem than the last, so I will keep the write up short. To 

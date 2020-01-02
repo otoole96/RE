@@ -1,0 +1,31 @@
+#+AUTHOR: Zachary O'Toole
+#+TITLE: Writeup December 2019
+
+
+*** I. Introduction
+This CTF is another reversing exercise, albeit much simpler than the previous. To start, we are given another binary file that turns out to be an executable. Running the file command on it, we get
+
+#+begin_src
+ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=ba116ba1912a8c3779ddeb579404e2fdf34b1568, stripped
+#+end_src
+
+Again, we are given another ELF file (executable and linkable format). This is a standard executable file format for Unix (x86) systems. To start, we will run the binary and see what happens before jumping into the decompiler.
+
+*** II. First Impressions
+Upon running the bianry, we get a prompt for input. This is designated by an astrix with no other information provided:
+#+begin_src
+*
+#+end_src
+
+So, lets give it an input and see what we get.
+#+begin_src
+* maybe a password?
+[maybe]
+#+end_src
+
+It would appear that nothing happens, as expected. I guess this is our queue to fire up the decompiler and figure out what is going on.
+
+*** Decompiler
+I have chosen to use the Ghidra to disassemble and decompile the program. There is a lot to like about the program, above all its cost (free). Feel free to use whatever decompiler or even disassembler you would like. I personally find Ghidra's decompilation tool for x86/64 instruction set architecture useful. I mean, check out how nice much of *main* looks in Ghidra:
+
+[[./img/writeup2/dec19_main.png]]

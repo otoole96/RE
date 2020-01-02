@@ -32,14 +32,14 @@ the NSA continues to develop it. Second, it's FREE. Hard to argue with a good ba
 ** III. Static analysis
 Finally, we can actually start reverse engineering this program. I am going to omit how to get Ghidra up and running-- its a fairly straight-forward process. However, it may take a bit more time to get used to navigating Ghidra. There are some nice features I'd like to mention before diving into things. First, the decompiler is very powerful. It provides a *pseudocode* representation of the assembly code, usually resembling a C/C++ style syntax. With that being said, it does not decompile some portions very well (at all). This is where your extensive knowledge as a reverse engineer would come into play! But, I digress. The decompiler will only be marginally helpful for this application as it was likely written in assembly. Another feature I wanted to highlight is the function call graph. This window creates a hierarchical graph of how a function is called and what it calls. For larger programs, this can be helpful with figuring out how specific functions fit within the overall context of the application. So, what does Ghidra look like then? The following figure shows the top of the disassembly in the **Listing** window. 
 
-[[./img/iii_initialview.jpg]]
+[[./img/writeup1/iii_initialview.jpg]]
 
 Really, this is pretty basic stuff. There are plenty of tools that spit out the disassembly of a binary. It is, however, important to know that this window is still very valuable for the following reason. Decompilers are not 100% accurate. This is due to the fact that a lot of information is lost when the program is compiled, especially without symbols. I am not too well-versed on how decompilation algorithms work, but I am optimistic they will improve with time. Until then, it is still important for people doing reversing to be very comfortable with assembly code to verify or correct what the decompiler produces. So, let's take a look at what the decompiled code looks like. The following screenshots are of interesting functions in the binary.
 
-[[./img/iii_func1.png]]
-[[./img/iii_func2.png]]
-[[./img/iii_func3.png]]
-[[./img/iii_func4.png]]
+[[./img/writeup1/iii_func1.png]]
+[[./img/writeup1/iii_func2.png]]
+[[./img/writeup1/iii_func3.png]]
+[[./img/writeup1/iii_func4.png]]
 
 I went ahead and renamed them after a quick to determine what the function might do. The following table shows each:
 
@@ -52,7 +52,7 @@ I went ahead and renamed them after a quick to determine what the function might
 
 Additionally, I might as well include the full function call tree. It is pretty interesting and a neat feature of Ghidra. 
 
-[[./img/function_call_tree.png]]
+[[./img/writeup1/function_call_tree.png]]
 
 This figure allows us to see the whole picture after having renamed some functions. We can get a good understanding of how the program acts as a whole. As we can see, (4) does not get called in the tree. After reading through the code in (3), this will likely be a problem we have to consider later. But for now, we can just go through the normal execution cycle of the program statically. 
 
@@ -61,7 +61,7 @@ From here on, I will explain what I am doing and avoid putting in much more code
 ***** A. Initial Impression 
 Initially, I was really curious about (2). Without too much inspection, it looks like the function opens the file "/tmp/secret" and reads in the contents, checking it against the password. So, we can easily make that file and see if the output changes. Spoiler, it doesn't. There must be some exit call before we hit the flag generator function. Low and behold, the secret password function exits if the return value of strcmp is 0, which occurs when the strings are the same (lines 21-23 of (2)). This can be solved with a simple patch. The plan is to change the JNZ to a JZ opcode, which effectively negates the if-statement. To do this, I am using emacs hexl mode. We just need to get the address from Ghidra, which can be done by referring to the listing. Then, we must locate the opcode for JNZ (should be 74) and change it to the opcode for JZ (should be 75). Note, you will have to pay attention to the operands and addressing modes. They must match up for this simple patch to work. After loading the new binary into Ghidra, we can see the logic has changed.
 
-[[./img/patch1.png]]
+[[./img/writeup1/patch1.png]]
 
 But we have more work to do. After running, nothing happens again. This after inspecting the return values of the function, we can see there are some specific cases where the function returns 1. Looking at (1), it exits if the return value is 0. So, we want (2) to return 1 or to change the logic in (1). Solution? Another patch! We can even do a patch similar to the one previously mentioned. Instead of JNZ to JZ, we can do JZ to JNZ and negate the logic. After running the binary, we finally got an output! 
 
@@ -88,7 +88,7 @@ Clearly, we are not quite there yet. No matter what inputs, we always get this o
 There are some really interesting sections of data used within the binary. These are just bytes of random (or not so random) data. Let's take a look at the context of how they are used, and maybe we can figure out what they are. 
 
 - Section 1
-[[./img/data_section1.png]]
+[[./img/writeup1/data_section1.png]]
 
 After some investigation, the above section of code appears to be involved in generating the flag in (4). In particular, each byte is XOR'ed with the argument passed into the function. So, I went ahead an made a python script to brute force the possible keys for me. Below, you can see the very simple script that does just that.
 
