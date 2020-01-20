@@ -1,0 +1,58 @@
+#+AUTHOR: Zachary O'Toole
+#+TITLE: LD Preloading
+
+I'd like to provide a brief explanation of an interesting attack vector for ccde injection known as LD Preloading. Disclaimer: use the following information responsibly and lawfully. 
+
+Now that the legal stuff is out of the way, I'd like to say that this is a very neat trick that can assist in the SWRE process. This provides a myriad of different ways by which we can control a program. For example, we could change the physics of a video game. Or, we could read directly from the memory space of a program. maybe, we can inject some malicious, meterpreter-like code into a function. Really, the possibilities are vast, and that is why I would like to share this neat trick.
+
+*** I. Introduction
+What is LD Preloading? Well, it is a linux "trick" that allows someone to override a symbol in a binary file by creating their own implementation. In essence, one may implement their own function call and make a binary executable run it rather than a function in a shared object. This exploits how dynamic linkers resolve shared libraries by imposing an injected symbol before the real or original symbol is defined. So, let's jump into an example.
+
+*** II. Simple Example
+Below, I have provided a very boring C program that will print 5 random numbers between 0 and 100. I would like to note that this can be done with C++ as well. However, the names of symbols can be somewhat tricky due to the way C++ mangles function names. Anyway, below we can find the example program, *out*.
+
+#+begin_src c++
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main () {
+	int i = 0;
+	int r;
+	srand(time(NULL));
+	while (i++ < 5) {
+		r = rand();
+		printf("%d\n", r%100);
+	}
+	return 0;
+}
+#+end_src
+
+The output is exactly what you could expect, no trickery yet. Below you can find the output.
+
+#+begin_src
+68
+64
+26
+73
+62
+#+end_src
+
+Great, now the fun begins. Let's create a new file, call it *injection.c*. This will be compiled into a shared object, and its implementation of a function with the same name as a function in a shared object for some target program will be used instaead. Let's re-implement the *rand* function with a fixed return of 99 as a proof-of-concept.
+
+#+begin_src c++
+int rand () {
+	return 99;
+}
+#+end_src
+
+To actually complete the code injection, we must run the program using the *LD_PRELOAD* like so.
+
+#+begin_src
+LD_PRELOAD=$PWD/injection.so ./out
+#+end_src
+
+What does this do exactly? We are setting the environment variable *LD_PRELOAD* to our implementation of *rand*, as specified in the *injection.so* share object. Then, we simply execute the program with the injected shared object. As you may have guessed, the output is indeed "99" five times over.
+
+*** III. Conclusion
+LD_Preload enhances RE efforts tremendously. It allows us to gain so much control over the application. I know I will certainly be incorporating this trick into my practices, and I would recommend you give it a try as well. Please feel free to reach out if you have any feedback or questions (toole96 at gmail). 
