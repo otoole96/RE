@@ -29,3 +29,7 @@ It would appear that nothing happens, as expected. I guess this is our queue to 
 I have chosen to use the Ghidra to disassemble and decompile the program. There is a lot to like about the program, above all its cost (free). Feel free to use whatever decompiler or even disassembler you would like. I personally find Ghidra's decompilation tool for x86/64 instruction set architecture useful. I mean, check out how nice much of *main* looks in Ghidra:
 
 [[./img/writeup2/dec19_main.png]]
+
+Fine, maybe this doesn't actually look that great. But, for a stripped binary, this is about as good as it gets. We can go through and rename some important variables, but due to the size of this problem, I will proceed without having done so. 
+
+# TODO: Begin on digging into the logic of the binary, go over interesting variables, print statements, interesting functions, patch and done!
