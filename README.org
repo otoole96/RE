@@ -1,6 +1,6 @@
 * CTF Writeups
 
-*** Welcome! This repository contains writeups for the fun CTFs I have completed. During the explanations, I will try to maintain a high-level approach and not divulge exactly what CTFs they are. This way, they are more for educational purposes and others attempting them will not be spoiled the opportunity to learn.
+*** Welcome! This repository contains writeups for the fun CTFs I have completed. During the explanations, I will try to maintain a high-level approach and not divulge exactly what CTFs they are. This way, they are more for educational purposes, and others attempting them will not be spoiled the opportunity to learn.
 
 *** With these, my main purpose is to convey a few different things:
 1. Interesting approaches to solving unique problems
